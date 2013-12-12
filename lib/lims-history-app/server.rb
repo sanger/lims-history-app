@@ -4,6 +4,9 @@ require 'rabl'
 require 'lims-history-app/context'
 
 Rabl.register!
+Rabl.configure do |config|
+  config.include_child_root = false
+end
 
 module Lims
   module HistoryApp
@@ -21,8 +24,8 @@ module Lims
 
       before do
         content_type "application/json" 
-        @context = Context.new(request)
         @query_parameters = filtered_query_parameters
+        @context = Context.new(request)
       end
 
       before '/' do
@@ -39,7 +42,7 @@ module Lims
 
       get '/:model/?:uuid?' do
         @objects = @resource.call
-        rabl :resource, :format => :json
+        rabl :resources, :format => :json
       end
 
       get '/' do
