@@ -1,0 +1,3 @@
+node do
+  @resource
+end
