@@ -4,14 +4,19 @@ require 'lims-history-app/warehouse_resource'
 
 module Lims::HistoryApp
   class Context
+    attr_reader :page, :request
+
+    # @param [Sinatra::Request] request
     def initialize(request)
       @request = request
+      @page = (request.params.delete("page") || 1).to_i
     end
 
+    # @return [Hash]
     def for_root
       {}.tap do |root|
         Lims::WarehouseBuilder::ResourceTools::Database::S2_MODELS.each do |model|
-          root["#{model}s"] = {:read => "http://localhost:9292/#{model}s"}
+          root["#{model}s"] = {:read => "#{@request.base_url}/#{model}s"}
         end
       end
     end
@@ -20,7 +25,7 @@ module Lims::HistoryApp
     # @param [Hash] parameters
     # @return [WarehouseResource]
     def for_model(model_name, parameters={})
-     WarehouseResource.new(self, model_name, dataset_for(model_name, parameters))
+      WarehouseResource.new(self, model_name, dataset_for(model_name, parameters))
     end
 
     # @param [String] model_name
