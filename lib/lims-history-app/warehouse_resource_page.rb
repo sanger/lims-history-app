@@ -1,20 +1,20 @@
 require 'lims-history-app/resource'
 
 module Lims::HistoryApp
-  class WarehouseResource
+  class WarehouseResourcePage
     include Resource
-    NUMBER_PER_PAGE = 30
 
     def initialize(context, model_name, dataset)
       super(context)
       @dataset = dataset
       @model_name = model_name
+      @number_per_page = context.number_of_result_per_page
     end
 
     def call
-      offset = (@context.page - 1) * NUMBER_PER_PAGE
+      offset = (@context.page - 1) * @number_per_page
       @total = @dataset.count
-      @dataset.order(primary_key).limit(NUMBER_PER_PAGE).offset(offset).all
+      @dataset.order(primary_key).limit(@number_per_page).offset(offset).all
     end
 
     module Pagination
@@ -31,7 +31,7 @@ module Lims::HistoryApp
       end
 
       def last_page
-        (@total.to_f / NUMBER_PER_PAGE).ceil
+        (@total.to_f / @number_per_page).ceil
       end
 
       def next_page

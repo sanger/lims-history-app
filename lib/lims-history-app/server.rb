@@ -25,7 +25,7 @@ module Lims
       before do
         content_type "application/json" 
         @query_parameters = filtered_query_parameters
-        @context = Context.new(request)
+        @context = settings.context_service.new_context(request)
       end
 
       before '/' do

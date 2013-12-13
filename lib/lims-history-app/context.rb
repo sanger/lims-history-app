@@ -1,10 +1,11 @@
 require 'yaml'
 require 'lims-warehousebuilder/model'
-require 'lims-history-app/warehouse_resource'
+require 'lims-history-app/warehouse_resource_page'
 
 module Lims::HistoryApp
   class Context
     attr_reader :page, :request
+    attr_accessor :number_of_result_per_page
 
     # @param [Sinatra::Request] request
     def initialize(request)
@@ -25,7 +26,7 @@ module Lims::HistoryApp
     # @param [Hash] parameters
     # @return [WarehouseResource]
     def for_model(model_name, parameters={})
-      WarehouseResource.new(self, model_name, dataset_for(model_name, parameters))
+      WarehouseResourcePage.new(self, model_name, dataset_for(model_name, parameters))
     end
 
     # @param [String] model_name
@@ -34,7 +35,7 @@ module Lims::HistoryApp
     # @return [WarehouseResource]
     def for_uuid(model_name, uuid, parameters={})
       dataset = dataset_for(model_name, parameters).where(:uuid => uuid)
-      WarehouseResource.new(self, model_name, dataset)
+      WarehouseResourcePage.new(self, model_name, dataset)
     end
 
     private

@@ -1,0 +1,11 @@
+defaults: &defaults
+  number_of_result_per_page: 30
+
+development:
+  <<: *defaults
+
+test:
+  <<: *defaults
+
+production:
+  <<: *defaults
