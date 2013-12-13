@@ -4,6 +4,9 @@ module Lims::HistoryApp
   class WarehouseResourcePage
     include Resource
 
+    # @param [Context] context
+    # @param [String] model_name
+    # @param [Sequel::Dataset] dataset
     def initialize(context, model_name, dataset)
       super(context)
       @dataset = dataset
@@ -11,38 +14,26 @@ module Lims::HistoryApp
       @number_per_page = context.number_of_result_per_page
     end
 
+    # @return [Array]
     def call
-      offset = (@context.page - 1) * @number_per_page
+      offset = (page - 1) * @number_per_page
       @total = @dataset.count
       @dataset.order(primary_key).limit(@number_per_page).offset(offset).all
     end
 
-    module Pagination
-      def url_for(page_type)
-        page_number = send(page_type)
+    # @param [String,Symbol] target
+    def url_for(target)
+      if target =~ /^\w{8}-(\w{4}-?){3}-\w{12}$/
+        url = @context.request.base_url
+        url << "/#{@model_name}/#{target}"
+      else
+        page_number = send(target)
         url = "#{@context.request.url}"
         url.gsub!(/\??&?page=\d+/, '')
         url << (url =~ /\?/ ? "&" : "?")
         url << "page=#{page_number}"
       end
-
-      def first_page
-        1 
-      end
-
-      def last_page
-        (@total.to_f / @number_per_page).ceil
-      end
-
-      def next_page
-        @context.page + 1 unless @context.page == last_page
-      end
-
-      def previous_page
-       @context.page - 1 unless @context.page == 1
-      end
     end
-    include Pagination
 
     def name
       @model_name
@@ -54,6 +45,10 @@ module Lims::HistoryApp
 
     private
 
+    def page
+      @page ||= (@context.request.params.delete("page") || 1).to_i
+    end
+
     def private_attributes
       [primary_key]
     end
@@ -61,5 +56,29 @@ module Lims::HistoryApp
     def primary_key
       :internal_id
     end
+
+
+    module Pagination
+      # @return [Integer]
+      def first_page
+        1 
+      end
+
+      # @return [Integer]
+      def last_page
+        (@total.to_f / @number_per_page).ceil
+      end
+
+      # @return [Integer,Nil]
+      def next_page
+        page + 1 unless page == last_page
+      end
+
+      # @return [Integer,Nil]
+      def previous_page
+        page - 1 unless page == 1
+      end
+    end
+    include Pagination
   end
 end

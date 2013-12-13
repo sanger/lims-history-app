@@ -21,6 +21,20 @@ module Lims
           [k, Rack::Utils.escape_html(v)]
         end
       end
+      
+      helpers do
+        def url_for(target)
+          @resource_page.url_for(target)
+        end
+
+        def next_page?
+          @resource_page.next_page
+        end
+
+        def previous_page?
+          @resource_page.previous_page
+        end
+      end
 
       before do
         content_type "application/json" 
@@ -29,23 +43,24 @@ module Lims
       end
 
       before '/' do
-        @resource = @context.for_root
+        @root_resource = @context.for_root
       end
 
       before '/:model' do
-        @resource = @context.for_model(params[:model], @query_parameters)
+        @resource_page = @context.for_model(params[:model], @query_parameters)
       end
 
       before '/:model/:uuid' do
-        @resource = @context.for_uuid(params[:model], params[:uuid], @query_parameters)
+        @resource_page = @context.for_uuid(params[:model], params[:uuid], @query_parameters)
       end
 
       get '/:model/?:uuid?' do
-        @objects = @resource.call
+        @objects = @resource_page.call
         rabl :resources, :format => :json
       end
 
       get '/' do
+        @root_objects = @root_resource.call
         rabl :root, :format => :json
       end
     end

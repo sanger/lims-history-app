@@ -1,3 +1,3 @@
 node do
-  @resource
+  @root_objects
 end

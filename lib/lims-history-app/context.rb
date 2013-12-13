@@ -1,25 +1,21 @@
 require 'yaml'
 require 'lims-warehousebuilder/model'
 require 'lims-history-app/warehouse_resource_page'
+require 'lims-history-app/root_resource'
 
 module Lims::HistoryApp
   class Context
-    attr_reader :page, :request
+    attr_reader :request
     attr_accessor :number_of_result_per_page
 
     # @param [Sinatra::Request] request
     def initialize(request)
       @request = request
-      @page = (request.params.delete("page") || 1).to_i
     end
 
     # @return [Hash]
     def for_root
-      {}.tap do |root|
-        Lims::WarehouseBuilder::ResourceTools::Database::S2_MODELS.each do |model|
-          root["#{model}s"] = {:read => "#{@request.base_url}/#{model}s"}
-        end
-      end
+      RootResource.new(self)
     end
 
     # @param [String] model_name
