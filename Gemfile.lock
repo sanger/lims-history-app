@@ -1,4 +1,18 @@
 GIT
+  remote: http://github.com/sanger/lims-warehousebuilder.git
+  revision: 94c59e502b348f739b42566238d2b78435918450
+  branch: development
+  specs:
+    lims-warehousebuilder (1.5.0)
+      aequitas
+      amqp
+      facets
+      mysql2
+      rake
+      sequel
+      virtus
+
+GIT
   remote: http://github.com/sanger/psd_logger.git
   revision: dd2d634114df75b1d8535715c169a7fc99521389
   specs:
@@ -17,21 +31,9 @@ GIT
 PATH
   remote: .
   specs:
-    lims-history-app (0.1.0)
+    lims-history-app (0.2.0)
       bunny (= 0.9.0.pre10)
       facets
-
-PATH
-  remote: ../lims-warehousebuilder
-  specs:
-    lims-warehousebuilder (1.5.0)
-      aequitas
-      amqp
-      facets
-      mysql2
-      rake
-      sequel
-      virtus
 
 GEM
   remote: http://rubygems.org/
@@ -44,7 +46,7 @@ GEM
       tzinfo (~> 0.3.37)
     aequitas (0.0.2)
     amq-protocol (1.9.0)
-    amqp (1.1.6)
+    amqp (1.1.7)
       amq-protocol (>= 1.9.0)
       eventmachine
     atomic (1.1.14)
@@ -130,7 +132,7 @@ DEPENDENCIES
   jdbc-sqlite3
   json
   lims-history-app!
-  lims-warehousebuilder!
+  lims-warehousebuilder (~> 1.5.0)!
   mysql2
   oj
   psd_logger!

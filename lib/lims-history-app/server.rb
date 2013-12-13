@@ -12,10 +12,6 @@ module Lims
   module HistoryApp
     class Server < Sinatra::Base
 
-      def general_error(status_code, *messages)
-        halt(status_code, { 'Content-Type' => 'application/json' }, %Q{{"general":#{messages.inspect}}})
-      end
-
       def filtered_query_parameters
         request.params.mash do |k,v|
           [k, Rack::Utils.escape_html(v)]

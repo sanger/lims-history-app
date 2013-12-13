@@ -1,3 +1,4 @@
+# TODO: require yaml in lims-warehousebuilder/sequel and remove it here
 require 'yaml'
 require 'lims-warehousebuilder/model'
 require 'lims-history-app/warehouse_resource_page'

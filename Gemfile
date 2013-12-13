@@ -2,8 +2,7 @@ source "http://rubygems.org"
 gemspec
 
 gem 'sinatra', :git => 'http://github.com/sinatra/sinatra.git', :branch => '459369eb66224836f72e21bbece58c007f3422fa'
-#gem 'lims-warehousebuilder', '~>1.4.1', :git => 'http://github.com/sanger/lims-warehousebuilder.git' , :branch => 'development'
-gem 'lims-warehousebuilder', :path => '../lims-warehousebuilder' 
+gem 'lims-warehousebuilder', '~>1.5.0', :git => 'http://github.com/sanger/lims-warehousebuilder.git' , :branch => 'development'
 
 gem 'json'
 gem 'oj', :platforms => :mri
