@@ -1,5 +1,9 @@
-require 'lims-history-app'
+unless ENV["LIMS_WAREHOUSEBUILDER_ENV"]
+  ENV["LIMS_WAREHOUSEBUILDER_ENV"] = "development" 
+end
+
 require 'yaml'
+require 'lims-history-app'
 
 Lims::HistoryApp::Server.configure(:development) do |config|
   history_config = YAML.load_file(File.join('config','history.yml'))["development"] 
